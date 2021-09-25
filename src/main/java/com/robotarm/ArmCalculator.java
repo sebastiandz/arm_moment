@@ -1,5 +1,6 @@
 package com.robotarm;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,9 @@ public class ArmCalculator {
     */
 
     private final double CONST_G = 9.8; // [m/s2] przyspieszenie grawitacyjne
+    private final double PAYLOAD = 0.8; // [kg]
 
+    private static DecimalFormat df2 = new DecimalFormat("0.00");
 
     public void calculate() {
         System.out.println("### calculate ###");
@@ -48,11 +51,11 @@ public class ArmCalculator {
                 masa += model.get(nextI).getServo().getWeight();
             }
 
-            double moment = CONST_G * calkowitaDlugoscDzwigni * masa;
+            double moment = CONST_G * calkowitaDlugoscDzwigni * masa / armElement.getServo().getRatio();
             momentSum += moment;
         }
 
-        System.out.println(String.format("S%s : %s Nm", start, momentSum));
+        System.out.println(String.format("S%s : %s Nm; %s kg/cm", start, df2.format(momentSum), df2.format(10.197162129779 * momentSum)));
         return momentSum;
     }
 
@@ -64,7 +67,7 @@ public class ArmCalculator {
         elements.add(
                 ArmElement.builder()
                         .arm(Arm.builder().weight(0.3).lenght(0.17).build())
-                        .servo(Servo.builder().weight(0.28).torque(0.45).build())
+                        .servo(Servo.builder().weight(0.28).torque(0.45).ratio(38.4).build())
                         .build()
         );
 
@@ -72,7 +75,7 @@ public class ArmCalculator {
         elements.add(
                 ArmElement.builder()
                         .arm(Arm.builder().weight(0.23).lenght(0.23).build())
-                        .servo(Servo.builder().weight(0.4).torque(0.59).build())
+                        .servo(Servo.builder().weight(0.4).torque(0.59).ratio(38.4).build())
                         .build()
         );
 
@@ -80,7 +83,7 @@ public class ArmCalculator {
         elements.add(
                 ArmElement.builder()
                         .arm(Arm.builder().weight(0.2).lenght(0.20).build())
-                        .servo(Servo.builder().weight(0.22).torque(0.22).build())
+                        .servo(Servo.builder().weight(0.22).torque(0.22).ratio(38.4).build())
                         .build()
         );
 
@@ -88,7 +91,7 @@ public class ArmCalculator {
         elements.add(
                 ArmElement.builder()
                         .arm(Arm.builder().weight(0.05).lenght(0.04).build())
-                        .servo(Servo.builder().weight(0.07).torque(0.046).build())
+                        .servo(Servo.builder().weight(0.07).torque(0.046).ratio(38.4).build())
                         .build()
         );
 
@@ -96,15 +99,15 @@ public class ArmCalculator {
         elements.add(
                 ArmElement.builder()
                         .arm(Arm.builder().weight(0.05).lenght(0.04).build())
-                        .servo(Servo.builder().weight(0.07).torque(0.046).build())
+                        .servo(Servo.builder().weight(0.07).torque(0.046).ratio(38.4).build())
                         .build()
         );
 
         // arm 5
         elements.add(
                 ArmElement.builder()
-                        .arm(Arm.builder().weight(0.05).lenght(0.04).build())
-                        .servo(Servo.builder().weight(0.07).torque(0.046).build())
+                        .arm(Arm.builder().weight(0.05 + PAYLOAD).lenght(0.04).build())
+                        .servo(Servo.builder().weight(0.07).torque(0.046).ratio(38.4).build())
                         .build()
         );
 

@@ -9,5 +9,6 @@ public class Servo {
 
     private double weight; // kg
     private double torque; // Nm
+    private double ratio = 1.0;
 
 }
