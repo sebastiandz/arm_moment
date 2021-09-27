@@ -48,11 +48,13 @@ public class ArmCalculator {
             double masa = armElement.getArm().getWeight();
             int nextI = i + 1;
             if (nextI < model.size()) {
-                masa += model.get(nextI).getServo().getWeight();
+                double masaNastepnegoSerwa = model.get(nextI).getServo().getWeight();
+                // moment wynikający z masy serwa umieszczonego na końcu naszego ramienia, jest to serwo sterujące następnym ramieniem
+                momentSum += CONST_G * 0.5 * calkowitaDlugoscDzwigni * masaNastepnegoSerwa / armElement.getServo().getRatio();
             }
 
-            double moment = CONST_G * calkowitaDlugoscDzwigni * masa / armElement.getServo().getRatio();
-            momentSum += moment;
+            // moment wynikający z masy ramienia, przyjmuje że cała masa ramienia jest skupiowna w  połowie długości (* 0.5)
+            momentSum += CONST_G * 0.5 * calkowitaDlugoscDzwigni * masa / armElement.getServo().getRatio();
         }
 
         System.out.println(String.format("S%s : %s Nm; %s kg/cm", start, df2.format(momentSum), df2.format(10.197162129779 * momentSum)));
